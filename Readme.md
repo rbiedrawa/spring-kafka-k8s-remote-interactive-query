@@ -106,7 +106,7 @@ This repository demonstrates how to implement Kafka remote interactive queries.
   kubectl logs <your-pod-name> -n word-count
   
   # kubectl logs word-count-d85996cb-mjtw6 -n word-count
-  # 2021-05-26 18:17:44.967  INFO 1 --- [nio-8080-exec-9] c.r.app.kafka.KafkaWordRepository        : Handling key example from different host HostInfo{host='10.1.1.214', port=8080}
+  # 2021-05-26 18:17:44.967 c.r.app.kafka.KafkaWordRepository : Handling key example from different host HostInfo{host='10.1.1.214', port=8080}
   ```
 
 * Delete all k8s resources.
