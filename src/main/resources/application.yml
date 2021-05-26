@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+app:
+  kafka:
+    bootstrap-servers: ${MY_BOOTSTRAP_SERVERS:kubernetes.docker.internal:9092}
+
+spring:
+  application:
+    name: spring-k8s-interactive-query
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrap-servers: ${app.kafka.bootstrap-servers}
+  cloud:
+    stream:
+      function:
+        definition: >-
+          wordCountFunction;
+      bindings:
+        wordCountFunction-in-0:
+          destination: words
+        wordCountFunction-out-0:
+          destination: counts
+      kafka:
+        streams:
+          binder:
+            configuration:
+              application.server: ${MY_POD_IP:localhost}:${server.port}
+              commit.interval.ms: 100
+              default:
+                key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+            functions:
+              wordCountFunction:
+                applicationId: word_count_kstream
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,bindings
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    org.apache.kafka.clients.consumer.internals.SubscriptionState: WARN

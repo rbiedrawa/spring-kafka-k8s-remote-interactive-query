@@ -1,0 +1,55 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: kafka
+  name: kafka
+  namespace: kafka
+spec:
+  serviceName: kafka
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+      - env:
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: ADV_HOST
+          value: kafka.kafka.svc.cluster.local
+        - name: RUNNING_SAMPLEDATA
+          value: "0"
+        - name: RUNTESTS
+          value: "0"
+        - name: SAMPLEDATA
+          value: "0"
+        image: landoop/fast-data-dev:2.2.1
+        imagePullPolicy: IfNotPresent
+        name: kafka
+        ports:
+        - containerPort: 2181
+        - containerPort: 3030
+        - containerPort: 8081
+        - containerPort: 8082
+        - containerPort: 8083
+        - containerPort: 9092
+        resources: {}
+        volumeMounts:
+          - mountPath: /data
+            name: kafka-data
+      restartPolicy: Always
+      volumes:
+        - name: kafka-data
+          persistentVolumeClaim:
+            claimName: kafka-data

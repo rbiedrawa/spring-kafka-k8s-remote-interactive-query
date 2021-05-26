@@ -1,0 +1,31 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: word-count
+  namespace: word-count
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - pods
+      - endpoints
+      - namespaces
+      - configmaps
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: word-count
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: word-count
+subjects:
+  - kind: ServiceAccount
+    name: default

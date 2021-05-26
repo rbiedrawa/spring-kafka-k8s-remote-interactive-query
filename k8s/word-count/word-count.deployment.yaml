@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: word-count
+  name: word-count
+  namespace: word-count
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: word-count
+  template:
+    metadata:
+      labels:
+        app: word-count
+    spec:
+      containers:
+        - image: rbiedrawa/spring-kafka-k8s-remote-interactive-query:0.0.1
+          name: word-count
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 300
+            timeoutSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+          envFrom:
+            - configMapRef:
+                name: word-count
+          env:
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
