@@ -1,6 +1,6 @@
 # Spring kafka k8s remote interactive queries (demo)
 
-This repository demonstrates how to implement remote interactive queries.
+This repository demonstrates how to implement Kafka remote interactive queries.
 
 ## Getting Started
 
