@@ -4,7 +4,7 @@ This repository demonstrates how to implement Kafka remote interactive queries.
 
 ## Getting Started
 
-### Prerequisite
+### Prerequisites
 
 * Java 11
 * Docker
